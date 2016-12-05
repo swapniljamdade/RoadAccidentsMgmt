@@ -28,8 +28,7 @@ public class AccidentDataProcessor {
 
     private static final int DATA_PROCESSING_BATCH_SIZE = 10000;
     
-    BlockingQueue<List<RoadAccident>> roadAccidentQueue = new ArrayBlockingQueue<>(3);
-    BlockingQueue<List<RoadAccidentDetails>> roadAccidentDetailsQueue = new ArrayBlockingQueue<>(3);
+    
     private volatile boolean running = true;
 
     private AccidentDataReader accidentDataReader = new AccidentDataReader();
@@ -44,9 +43,9 @@ public class AccidentDataProcessor {
 
     public void init(){
         fileQueue.add(FILE_PATH_1);
-        //fileQueue.add(FILE_PATH_2);
-        //fileQueue.add(FILE_PATH_3);
-        //fileQueue.add(FILE_PATH_4);
+        fileQueue.add(FILE_PATH_2);
+        fileQueue.add(FILE_PATH_3);
+        fileQueue.add(FILE_PATH_4);
 
         accidentDataWriter.init(OUTPUT_FILE_PATH);
     }
@@ -64,6 +63,8 @@ public class AccidentDataProcessor {
     }
 
     private void processFile() throws InterruptedException{
+		BlockingQueue<List<RoadAccident>> roadAccidentQueue = new ArrayBlockingQueue<>(10);
+		BlockingQueue<List<RoadAccidentDetails>> roadAccidentDetailsQueue = new ArrayBlockingQueue<>(10);
     	ExecutorService executor = Executors.newFixedThreadPool(3);
     	FutureTask<RoadAccident> readerTaskFuture = new FutureTask<RoadAccident>(new Runnable() {
 					@Override
