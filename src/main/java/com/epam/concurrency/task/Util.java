@@ -12,7 +12,8 @@ public class Util {
         try{
             Thread.sleep(timeInMs);
         }catch (Exception e){
-            e.printStackTrace();
+        	Thread.currentThread().interrupt();
+        	 throw new RuntimeException(e);
         }
 
     }
